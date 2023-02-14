@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import EnTete from "./components/entete/EnTete";
+import "bootstrap/dist/css/bootstrap.min.css";
+import FilmList from "./components/filmlist/FilmList";
+import AddMovie from "./Footer/AddMovie";
+import BottomFoot from "./components/bottomfoot/BottomFoot";
+import { useState } from "react";
+import { Films } from "./components/filmlist/DataFile";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Car from "./components/filmlist/Car";
+import Trailer from "./components/filmlist/Trailer";
 
 function App() {
+  const [list, setList] = useState(Films);
+  const handleDelete = (id) => {
+    setList(list.filter((el) => el.id !== id));
+  };
+  const handleAdd = (newMovie) => {
+    setList([...list, newMovie]);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <EnTete />
+
+        <Routes>
+          <Route
+            path="/"
+            element={<FilmList del={handleDelete} list={list} />}
+          />
+          <Route path="/DataFile/:id" element={<Trailer test={list} />} />
+        </Routes>
+        <AddMovie className="f" add={handleAdd} />
+        <BottomFoot />
+      </BrowserRouter>
     </div>
   );
 }
